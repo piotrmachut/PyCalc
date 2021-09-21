@@ -1,3 +1,12 @@
+from ascii import logo
+from os import system, name
+
+def clear():
+    if name == 'nt':
+        _ = system('cls')
+    else:
+        _ = system('clear')
+
 def add(n1, n2):
     return n1 + n2
 
@@ -11,7 +20,7 @@ def divide(n1, n2):
     return n1 / n2
 
 def should_continue(result):
-    decission = input(f"Type 'y' to continue calculating with {result}, or type 'n' to exit.: ")
+    decission = input(f"Type 'y' to continue calculating with {result}, or type 'n' start new calculation: ")
     if decission == 'y':
         return True
     elif decission == 'n':
@@ -26,25 +35,31 @@ operations = {
     "/": divide,
 }
 
-num1 = int(input("What's the first number?: "))
+def calculator():
+    print(logo)
 
-for symbol in operations:
-    print(symbol)
+    num1 = float(input("What's the first number?: "))
 
-operation_symbol = input("Pick an operation from the line above: ")
-num2 = int(input("What's the second number?: "))
+    for symbol in operations:
+        print(symbol)
 
-result = operations[operation_symbol](num1, num2)
+    continue_calculation = True
 
-print(f"{num1} {operation_symbol} {num2} = {result}")
+    while continue_calculation:
+        operation_symbol = input("Pick an operation: ")
+        num2 = float(input("What's the next number?: "))
 
-continue_calculation = should_continue(result)
+        result = operations[operation_symbol](num1, num2)
 
-while continue_calculation:
-    operation_symbol = input("Pick next operation: ")
-    num1 = result
-    num2 = int(input("What's the next number?: "))
-    result = operations[operation_symbol](num1, num2)
-    print(f"{num1} {operation_symbol} {num2} = {result}")
-    continue_calculation = should_continue(result)
+        print(f"{num1} {operation_symbol} {num2} = {result}")
 
+        check = should_continue(result)
+
+        if check:
+            num1 = result
+        elif not check:
+            continue_calculation = False
+            clear()
+            calculator()
+
+calculator()
